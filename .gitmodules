@@ -1,0 +1,3 @@
+[submodule "skill-repos/writing-skills"]
+	path = skill-repos/writing-skills
+	url = https://github.com/pujunru/writing-skills.git
