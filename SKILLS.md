@@ -36,8 +36,11 @@ is what lets you:
 
 - `git submodule update --init --recursive` the whole hub and get every
   skill from every linked theme, **or**
-- `npx skills add <owner>/<theme-repo>@<individual-skill>` to grab exactly
-  one skill into a project, with no submodules involved at all.
+- `npx skills add <owner>/<theme-repo> --all` to grab every skill from one
+  theme into a project, with no submodules involved at all — or
+  `npx skills add <owner>/<theme-repo>@<individual-skill>` for just one
+  skill (see [section 4](#4-installing-with-npx-skills) for the difference,
+  it's easy to install only one skill by accident).
 
 ## 2. Authoring a new skill repo
 
@@ -143,20 +146,46 @@ installs it into the right directory for your agent (`.claude/skills/` for
 Claude Code, `.agents/skills/` for others) — no cloning or submodules
 required.
 
-Install one skill from a linked skill repo into your current project:
+### Install every skill in a themed repo (the common case)
+
+Because each linked repo is a *collection* of skills, you almost always
+want all of them, not just one. `npx skills add <owner>/<repo>` with no
+`@<skill-name>` suffix lists/prompts interactively — to install everything
+non-interactively, pass `--all`:
 
 ```bash
-npx skills add <owner>/<skill-repo>@<skill-name>
+npx skills add <owner>/<skill-repo> --all         # project-level
+npx skills add <owner>/<skill-repo> -g --all      # user-level (global)
 ```
 
-Install globally, skipping the confirmation prompt:
+`--all` is shorthand for `--skill '*' --agent '*' -y` — it installs every
+skill in the repo, to every supported agent, without prompting. This is the
+command that matches this hub's design intent: one themed repo should give
+you its whole collection in one shot.
+
+> ⚠️ **Do not** append `@<skill-name>` unless you deliberately want only
+> that one skill. Installing `<owner>/<skill-repo>@<skill-name>` (with no
+> `--all`) installs **only that single skill** and silently skips every
+> other skill in the repo — easy to mistake for a full install, since the
+> command still succeeds and prints an "Installation complete" summary.
+
+### Install a single named skill
+
+If you only want one specific skill out of a themed repo:
 
 ```bash
-npx skills add <owner>/<skill-repo>@<skill-name> -g -y
+npx skills add <owner>/<skill-repo>@<skill-name>          # project-level
+npx skills add <owner>/<skill-repo>@<skill-name> -g -y    # user-level
 ```
 
-Once installed, in Claude Code type `/` in a session and the skill appears
-in the autocomplete list by its `name`.
+Once installed, in Claude Code type `/` in a session and the skill(s)
+appear in the autocomplete list by their `name`.
+
+### Updating after upstream changes
+
+Re-run the same `add --all` command you used originally — it overwrites
+existing installs with the latest content from the repo. There is no
+separate "sync" step; `npx skills add` is idempotent and safe to re-run.
 
 > **Note:** requires `skills` CLI version `1.5.16` or newer — earlier
 > versions fail to link skills into `.claude/skills/`. `npx skills` always

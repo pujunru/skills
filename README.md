@@ -67,14 +67,18 @@ git submodule update --init --recursive
 Full command reference (clone, update, remove, etc.) is in
 [`SKILLS.md`](SKILLS.md#git-submodule-command-reference).
 
-## Installing individual skills without cloning
+## Installing skills without cloning
 
-Skills in any linked repo can also be installed a la carte into another
-project using the [`npx skills`](https://www.skills.sh/) CLI, no submodules
-or cloning required:
+Skills in any linked repo can also be installed directly using the
+[`npx skills`](https://www.skills.sh/) CLI, no submodules or cloning
+required. To install every skill in a themed repo (the common case):
 
 ```bash
-npx skills add <owner>/<skill-repo>@<skill-name>
+npx skills add <owner>/<skill-repo> --all         # project-level
+npx skills add <owner>/<skill-repo> -g --all      # user-level (global)
 ```
 
-See [`SKILLS.md`](SKILLS.md#installing-with-npx-skills) for details.
+> ⚠️ Omitting `--all` and appending `@<skill-name>` instead installs
+> **only that one skill**, silently skipping the rest of the repo. See
+> [`SKILLS.md`](SKILLS.md#installing-with-npx-skills) for the full
+> explanation and when to use each form.
