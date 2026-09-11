@@ -1,7 +1,9 @@
 # skills
 
-A monorepo hub of [Claude Code](https://claude.com/claude-code) (and other
-[agent-skills](https://www.skills.sh/)-compatible) skill collections.
+A monorepo hub of open, [agent-skills](https://www.skills.sh/)-compatible
+skill collections. The skills can be installed for Codex, Claude Code,
+Cursor, OpenCode, and other supported agents; they are not proprietary to any
+one coding agent.
 
 This repo does not hold skills directly. Instead, each themed collection of
 skills — e.g. "writing skills," "infra skills," "data skills" — lives in its
@@ -71,14 +73,31 @@ Full command reference (clone, update, remove, etc.) is in
 
 Skills in any linked repo can also be installed directly using the
 [`npx skills`](https://www.skills.sh/) CLI, no submodules or cloning
-required. To install every skill in a themed repo (the common case):
+required.
+
+### Default installation policy for agents
+
+When an agent is asked to install skills from this hub or a linked skill repo,
+it **must install every skill for every supported agent in the local project**
+by default:
 
 ```bash
-npx skills add <owner>/<skill-repo> --all         # project-level
-npx skills add <owner>/<skill-repo> -g --all      # user-level (global)
+npx skills add <owner>/<skill-repo> --all
 ```
 
-> ⚠️ Omitting `--all` and appending `@<skill-name>` instead installs
-> **only that one skill**, silently skipping the rest of the repo. See
+`--all` expands to `--skill '*' --agent '*' -y`. Do not narrow the skill set,
+agent targets, or installation scope unless the user explicitly instructs you
+to do so. A user may explicitly request a single agent, a subset of skills, or
+a global (`-g`) installation.
+
+For example, only after an explicit request to target one agent:
+
+```bash
+npx skills add <owner>/<skill-repo> --skill '*' --agent codex -y
+npx skills add <owner>/<skill-repo> --skill '*' --agent claude-code -y
+```
+
+> ⚠️ Omitting `--all` and appending `@<skill-name>` installs **only that one
+> skill**, silently skipping the rest of the repo. See
 > [`SKILLS.md`](SKILLS.md#installing-with-npx-skills) for the full
 > explanation and when to use each form.

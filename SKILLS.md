@@ -5,8 +5,7 @@ This document covers, in detail:
 1. How this hub is organized
 2. How to author a new skill repo
 3. Git submodule command reference for this hub
-4. Installing individual skills with `npx skills`, without touching
-   submodules at all
+4. Installing skills with `npx skills`, without touching submodules at all
 
 ## 1. Organization
 
@@ -141,27 +140,35 @@ git commit -m "Remove <repo> submodule"
 
 [`npx skills`](https://www.skills.sh/) (by Vercel Labs, npm package
 [`skills`](https://www.npmjs.com/package/skills)) is a package manager for
-agent skills. It fetches a `SKILL.md` directly from a GitHub repo and
-installs it into the right directory for your agent (`.claude/skills/` for
-Claude Code, `.agents/skills/` for others) — no cloning or submodules
-required.
+the open agent-skills ecosystem. It fetches `SKILL.md` files directly from a
+GitHub repo and installs them into the selected agent's skill directory — no
+cloning or submodules required. It supports Codex, Claude Code, Cursor,
+OpenCode, and many other agents.
 
-### Install every skill in a themed repo (the common case)
+### Default installation policy for agents
 
-Because each linked repo is a *collection* of skills, you almost always
-want all of them, not just one. `npx skills add <owner>/<repo>` with no
-`@<skill-name>` suffix lists/prompts interactively — to install everything
-non-interactively, pass `--all`:
+When an agent is asked to install skills from this hub or one of its linked
+skill repos, it **must install every skill for every supported agent in the
+local project** unless the user explicitly gives different instructions:
 
 ```bash
-npx skills add <owner>/<skill-repo> --all         # project-level
-npx skills add <owner>/<skill-repo> -g --all      # user-level (global)
+npx skills add <owner>/<skill-repo> --all
 ```
 
 `--all` is shorthand for `--skill '*' --agent '*' -y` — it installs every
-skill in the repo, to every supported agent, without prompting. This is the
-command that matches this hub's design intent: one themed repo should give
-you its whole collection in one shot.
+skill in the repo, to every supported agent, without prompting. Treat that as
+the required default. Do not select a subset of skills, limit installation to
+one agent, or use global scope unless the user has explicitly asked for it.
+
+### User-directed exceptions
+
+When the user explicitly directs a narrower installation, use the requested
+agent identifier or skill name. For example:
+
+```bash
+npx skills add <owner>/<skill-repo> --skill '*' --agent codex -y
+npx skills add <owner>/<skill-repo> --skill '*' --agent claude-code -y
+```
 
 > ⚠️ **Do not** append `@<skill-name>` unless you deliberately want only
 > that one skill. Installing `<owner>/<skill-repo>@<skill-name>` (with no
@@ -169,17 +176,17 @@ you its whole collection in one shot.
 > other skill in the repo — easy to mistake for a full install, since the
 > command still succeeds and prints an "Installation complete" summary.
 
-### Install a single named skill
+### Explicit skill or scope exceptions
 
-If you only want one specific skill out of a themed repo:
+If the user explicitly asks for one specific skill or a global install:
 
 ```bash
-npx skills add <owner>/<skill-repo>@<skill-name>          # project-level
-npx skills add <owner>/<skill-repo>@<skill-name> -g -y    # user-level
+npx skills add <owner>/<skill-repo>@<skill-name> --agent codex -y
+npx skills add <owner>/<skill-repo> --all -g
 ```
 
-Once installed, in Claude Code type `/` in a session and the skill(s)
-appear in the autocomplete list by their `name`.
+The first command installs a named skill for Codex; the second performs a
+user-requested global installation for every supported agent.
 
 ### Updating after upstream changes
 
@@ -187,10 +194,8 @@ Re-run the same `add --all` command you used originally — it overwrites
 existing installs with the latest content from the repo. There is no
 separate "sync" step; `npx skills add` is idempotent and safe to re-run.
 
-> **Note:** requires `skills` CLI version `1.5.16` or newer — earlier
-> versions fail to link skills into `.claude/skills/`. `npx skills` always
-> fetches the latest published version, so this is only relevant if you've
-> pinned an older version somewhere.
+> **Note:** use a current version of the `skills` CLI. `npx skills` fetches
+> the latest published version unless you have pinned an older version.
 
 This install path is completely independent of the submodule mechanism
 above — you can use one, the other, or both. Submodules are for pulling in

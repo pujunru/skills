@@ -1,8 +1,9 @@
 # Skill Repo Template
 
 This is the scaffolding for a **skill repository** — a standalone GitHub repo
-that holds one *themed* collection of related Claude Code (or other
-skills-compatible agent) skills. For example: a "writing skills" repo holding
+that holds one *themed* collection of related, agent-compatible skills. These
+skills can target Codex, Claude Code, Cursor, OpenCode, or another supported
+agent. For example: a "writing skills" repo holding
 `clear-writing`, `editing-pass`, `tone-check`, etc.
 
 A skill repo is meant to be:
@@ -39,9 +40,8 @@ description: One sentence describing what this skill does and when to use it.
 Instructions for the skill go here...
 ```
 
-The frontmatter `name` and `description` are what agents use to decide when
-to invoke the skill (surfaced e.g. in Claude Code's `/` menu), so keep the
-description specific and action-oriented.
+The frontmatter `name` and `description` help compatible agents decide when to
+invoke the skill. Keep the description specific and action-oriented.
 
 ## Using this template
 
@@ -66,19 +66,23 @@ gh repo create <your-account>/writing-skills --public --source=. --push
 # 4. Link it into this hub as a submodule (see hub README)
 ```
 
-## Installing a skill from this repo with npx
+## Installing skills from this repo with npx
 
-Once pushed to GitHub as `<owner>/<repo>`, any skill in `skills/<name>/` can
-be installed directly into another project without cloning:
+Once pushed to GitHub as `<owner>/<repo>`, agents installing from this repo
+must install every skill for every supported agent in the local project unless
+the user explicitly instructs otherwise:
 
 ```bash
-npx skills add <owner>/<repo>@<skill-name>
+npx skills add <owner>/<repo> --all
 ```
 
-For example, once `writing-skills` exists:
+Use `--agent <agent>`, `@<skill-name>`, or `-g` only when the user explicitly
+requests a particular agent, individual skill, or global installation.
+
+For example, after a user explicitly requests one skill for Codex:
 
 ```bash
-npx skills add <owner>/writing-skills@clear-writing
+npx skills add <owner>/writing-skills@clear-writing --agent codex -y
 ```
 
 See <https://www.skills.sh/> for the full CLI reference.
