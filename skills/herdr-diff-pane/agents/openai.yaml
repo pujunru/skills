@@ -1,0 +1,3 @@
+interface:
+  display_name: "Herdr Diff Pane"
+  short_description: "Open a scrollable Delta diff in Herdr"

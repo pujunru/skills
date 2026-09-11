@@ -9,7 +9,11 @@ This document covers, in detail:
 
 ## 1. Organization
 
-- **This repo (`skills`)** is a hub/index. It has no skills of its own.
+- **This repo (`skills`)** is a hub/index. It can also contain small,
+  installable operational skills under `skills/<name>/` when they support the
+  hub's installation workflow.
+- **`skills/<name>/`** — a root-level, installable operational skill owned by
+  this hub (for example, `skills/herdr-diff-pane/`).
 - **`skill-repos/<name>/`** — one Git submodule per themed skill repo (e.g.
   `skill-repos/writing-skills/`, `skill-repos/infra-skills/`). Each is a
   fully independent GitHub repo with its own history, issues, and releases.
@@ -30,8 +34,8 @@ own `skills/` directory:
     └── ...
 ```
 
-This nested structure (`hub -> skill-repos/<theme submodule> -> skills/<individual skill>`)
-is what lets you:
+This layout (`hub -> skills/<operational skill>` or `hub -> skill-repos/<theme
+submodule> -> skills/<individual skill>`) lets you:
 
 - `git submodule update --init --recursive` the whole hub and get every
   skill from every linked theme, **or**
@@ -39,7 +43,9 @@ is what lets you:
   theme into a project, with no submodules involved at all — or
   `npx skills add <owner>/<theme-repo>@<individual-skill>` for just one
   skill (see [section 4](#4-installing-with-npx-skills) for the difference,
-  it's easy to install only one skill by accident).
+  it's easy to install only one skill by accident), **or**
+- `npx skills add <owner>/skills@<operational-skill>` to install a root-level
+  operational skill from this hub.
 
 ## 2. Authoring a new skill repo
 
@@ -154,6 +160,20 @@ local project** unless the user explicitly gives different instructions:
 ```bash
 npx skills add <owner>/<skill-repo> --all
 ```
+
+After a root-level skill has been committed and pushed, use this command for
+the hub itself:
+
+```bash
+npx skills add pujunru/skills --all
+```
+
+This discovers root-level skills under `skills/`, such as
+`skills/herdr-diff-pane/SKILL.md`, and installs all of them for every
+supported agent. `--all` covers all skills in the named source repository; it
+does not traverse linked submodule repositories. Install each themed
+collection from its own repository with a separate `--all` command, for
+example `npx skills add pujunru/writing-skills --all`.
 
 `--all` is shorthand for `--skill '*' --agent '*' -y` — it installs every
 skill in the repo, to every supported agent, without prompting. Treat that as
