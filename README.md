@@ -23,7 +23,9 @@ skills/
 ├── SKILLS.md                 detailed instructions (submodules + npx install)
 ├── .gitmodules                registered submodules (populated as you add repos)
 ├── skills/                    installable hub operational skills
-│   └── herdr-diff-pane/
+│   ├── herdr-diff-pane/
+│   │   └── SKILL.md
+│   └── where-are-we/          strict five-part status report mid-task
 │       └── SKILL.md
 ├── skill-repos/                each subfolder is a submodule -> a skill repo
 │   └── <your-skill-repo>/      (added via `git submodule add`)

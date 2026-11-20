@@ -1,0 +1,3 @@
+interface:
+  display_name: "Where Are We"
+  short_description: "Strict five-part status: context, progress, blockers, ask, forecast"
