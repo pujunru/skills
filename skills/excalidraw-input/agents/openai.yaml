@@ -1,0 +1,3 @@
+interface:
+  display_name: "Excalidraw Input"
+  short_description: "Sketch context in Excalidraw and have the agent read it back"

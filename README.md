@@ -23,8 +23,11 @@ skills/
 ├── SKILLS.md                 detailed instructions (submodules + npx install)
 ├── .gitmodules                registered submodules (populated as you add repos)
 ├── skills/                    installable hub operational skills
-│   └── herdr-diff-pane/
-│       └── SKILL.md
+│   ├── herdr-diff-pane/
+│   │   └── SKILL.md
+│   └── excalidraw-input/      draw a diagram as input; agent reads it back
+│       ├── SKILL.md
+│       └── scripts/excalidraw_io.py
 ├── skill-repos/                each subfolder is a submodule -> a skill repo
 │   └── <your-skill-repo>/      (added via `git submodule add`)
 └── skill-repo-template/        scaffolding for starting a NEW skill repo
